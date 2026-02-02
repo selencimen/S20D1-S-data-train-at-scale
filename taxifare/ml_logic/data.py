@@ -12,14 +12,21 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     - assigning correct dtypes to each column
     - removing buggy or irrelevant transactions
     """
-    # Compress raw_data by setting types to DTYPES_RAW
-    # YOUR CODE HERE
 
-    # Remove buggy transactions
-    # YOUR CODE HERE
+    # 1️⃣ Drop NaNs
+    df = df.dropna()
 
-    # Remove geographically irrelevant transactions (rows)
-    # YOUR CODE HERE
+    # 2️⃣ Remove buggy transactions
+    df = df[df["fare_amount"] > 0]
+    df = df[df["passenger_count"] > 0]
+
+    # 3️⃣ Remove geographically irrelevant rows (NYC bounding box)
+    df = df[
+        (df["pickup_longitude"].between(-74.3, -73.7)) &
+        (df["pickup_latitude"].between(40.5, 40.9)) &
+        (df["dropoff_longitude"].between(-74.3, -73.7)) &
+        (df["dropoff_latitude"].between(40.5, 40.9))
+    ]
 
     print("✅ data cleaned")
 
